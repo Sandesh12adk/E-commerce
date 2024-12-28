@@ -35,10 +35,19 @@ int getData(struct node* head){
 	ptr= head;
 	while(ptr!= NULL){
 		i++;
-		printf("%d Node's data: %d \n",ptr->data,i);
+		printf("%d Node's data: %d \n",i, ptr->data);
 		ptr= ptr->link;
 	}
-}
+	}
+		//Insertion of node at the beginning of the LinkList
+	struct node* insertAtbeginning(struct node* head, int data){
+		struct node* ptr;
+		ptr= (struct node*) malloc(sizeof(struct node));
+		ptr->link= head;
+		ptr->data= data;
+		head= ptr;
+		return head;
+	}
 int main(){
 	struct node *head, *current;
 	head= (struct node*) malloc(sizeof(struct node));
@@ -50,6 +59,9 @@ int main(){
 		addNewNode(head,i);
 	}
 	countNodes(head);
+	 getData(head);
+	 head=  insertAtbeginning(head,6);
+	 countNodes(head);
 	 getData(head);
 	return 0;
 }
