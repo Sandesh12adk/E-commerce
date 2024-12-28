@@ -76,6 +76,23 @@ struct node* insertAt(struct node* head, int data, int position) {
      printf("Now:");
     return head;
 }
+//Deleting the first node
+    struct node* deletingFirstNode(struct node* head){
+    	if(head== NULL){
+    		printf("\n List is already empty");
+    		return head;
+		}
+		else{
+			struct node* temp;
+			temp= head;
+			head= head->link;
+			free(temp);
+			temp= NULL;
+			 printf("Node has successfully deleted\n:");
+			  printf("Now:");
+			return head;
+		}
+	}
 int main(){
 	struct node *head, *current;
 	head= (struct node*) malloc(sizeof(struct node));
@@ -93,5 +110,7 @@ int main(){
 	 getData(head);
 	 insertAt(head, 5, 4);
 	  countNodes(head);
+	  head= deletingFirstNode(head);
+	   countNodes(head);
 	return 0;
 }
