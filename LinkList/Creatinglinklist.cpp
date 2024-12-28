@@ -93,6 +93,40 @@ struct node* insertAt(struct node* head, int data, int position) {
 			return head;
 		}
 	}
+void deleteAt(struct node* head, int position) {
+    int totalNodes = countNodes(head);
+    
+    if (position < 1 || position > totalNodes) {
+        printf("Error! Invalid Position.\n");
+        return;
+    }
+
+    struct node* ptr = head;
+    struct node* temp = NULL;
+
+    if (position == 1) {
+        // Special case: Deleting the first node
+        temp = head;
+        head = head->link;
+        free(temp);
+        printf("Node at position 1 has been deleted.\n");
+        return;
+    }
+
+    // Traverse to the node before the target node
+    for (int i = 1; i < position - 1; i++) {
+        ptr = ptr->link;
+    }
+
+    // Remove the target node
+    temp = ptr->link;
+    ptr->link = temp->link;
+    free(temp);
+
+    printf("Node at position %d has been deleted.\n", position);
+      printf("Now:");
+}
+
 int main(){
 	struct node *head, *current;
 	head= (struct node*) malloc(sizeof(struct node));
@@ -112,5 +146,9 @@ int main(){
 	  countNodes(head);
 	  head= deletingFirstNode(head);
 	   countNodes(head);
+	   deleteAt(head, 3);
+	    countNodes(head);
+	   
+
 	return 0;
 }
