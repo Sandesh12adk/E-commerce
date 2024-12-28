@@ -126,6 +126,18 @@ void deleteAt(struct node* head, int position) {
     printf("Node at position %d has been deleted.\n", position);
       printf("Now:");
 }
+//Deleting the entire nodes in the list
+void  deleteAll(struct node* head){
+	struct node* ptr;
+	ptr= head;
+	while(ptr!= NULL){
+		ptr= ptr->link;
+		free(head);
+		head= ptr;
+	}
+	 printf("Entire list has been deleted:\n");
+      printf("Now:");
+}
 
 int main(){
 	struct node *head, *current;
@@ -148,7 +160,7 @@ int main(){
 	   countNodes(head);
 	   deleteAt(head, 3);
 	    countNodes(head);
-	   
-
+	   deleteAll(head);
+	   countNodes(head);
 	return 0;
 }
