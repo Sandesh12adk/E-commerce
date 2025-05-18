@@ -29,7 +29,7 @@ public class Order extends BaseEntity{
     @JoinColumn(name = "UserId")
     private User user;
   //Order-Orderitem Relatiohship
-    @OneToMany(mappedBy = "order",fetch = FetchType.LAZY)
+    @OneToMany(mappedBy = "order",fetch = FetchType.LAZY,cascade = CascadeType.ALL)
     private List<OrderItem> orderItemList;
 
 }

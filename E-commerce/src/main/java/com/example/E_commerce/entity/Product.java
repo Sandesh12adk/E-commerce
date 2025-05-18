@@ -32,7 +32,7 @@ public class Product extends BaseEntity{
     @CreatedDate
     private LocalDate createdAt;
     //Product-Cart Relationship
-    @OneToMany(mappedBy = "product")
+    @OneToMany(mappedBy = "product",cascade = CascadeType.ALL)
     private List<CartItem> cartItemList;
     //Product-Seller RelationShip
     @ManyToOne

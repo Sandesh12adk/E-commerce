@@ -27,16 +27,16 @@ public class User extends BaseEntity{
     @Enumerated(value =EnumType.STRING)
     private USER_ROLE role;
     //User-Address RelationShip
-    @OneToOne(mappedBy = "user")
+    @OneToOne(mappedBy = "user",cascade = CascadeType.ALL)
     private Address address;
     //User-Order RelationShip
-    @OneToMany(mappedBy = "user")
+    @OneToMany(mappedBy = "user",cascade = CascadeType.ALL)
     private List<Order> orderList;
    //User-CartItem RelationShip
-    @OneToMany(mappedBy = "buyer")
+    @OneToMany(mappedBy = "buyer",cascade = CascadeType.ALL)
     private List<CartItem> cartItemList;
     //User(seller)-Product RelationShip
-   @OneToMany(mappedBy = "seller",fetch = FetchType.LAZY)
+   @OneToMany(mappedBy = "seller",fetch = FetchType.LAZY,cascade = CascadeType.ALL)
     private List<Product> productList;
 
 }
