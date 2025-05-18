@@ -49,10 +49,18 @@ public class CartController {
         cartItemService.delete(itemId);
         return ResponseEntity.ok("Deleted");
     }
-    @GetMapping("/getbyid/{cartItemId}")
+    @GetMapping("/findbyid/{cartItemId}")
     public ResponseEntity<CartItemDTO> findById(@PathVariable int cartItemId){
         CartItem cartItem= cartItemService.findById(cartItemId).orElseThrow(()->
-                 new ResourceNotFoundException("Cannot Find the CartItem with provided id") );
+                 new ResourceNotFoundException("Cannot Find the CartItem with provided Id") );
         return ResponseEntity.ok(CartItemMapper.createCartItemDTO(cartItem));
+    }
+    @PutMapping("updatequantity/{cartItemId}/{quantity}")
+    public ResponseEntity<String> updateTheQuantityOfCartItem(@PathVariable int cartItemId, @PathVariable int quantity){
+          CartItem cartItem= cartItemService.findById(cartItemId).orElseThrow(()->
+                new ResourceNotFoundException("Cannot Find the CartItem with provided Id"));
+          cartItem.setQuantity(quantity);
+          cartItemService.save(cartItem);
+          return ResponseEntity.ok("Updated Successfully");
     }
 }
