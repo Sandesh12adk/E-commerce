@@ -1,9 +1,10 @@
 package com.example.E_commerce.repo;
 
 import com.example.E_commerce.entity.Product;
+import org.springframework.data.repository.CrudRepository;
 import org.springframework.data.repository.PagingAndSortingRepository;
 import org.springframework.stereotype.Repository;
 
 @Repository
-public interface ProductrRepo extends PagingAndSortingRepository<Product,Integer> {
+public interface ProductrRepo extends PagingAndSortingRepository<Product,Integer>, CrudRepository<Product,Integer> {
 }
