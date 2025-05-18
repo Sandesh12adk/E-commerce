@@ -2,6 +2,7 @@ package com.example.E_commerce.controller;
 
 import com.example.E_commerce.Constant.PRODUCT_CATEGORY;
 import com.example.E_commerce.Constant.USER_ROLE;
+import com.example.E_commerce.dto.ProductDTO;
 import com.example.E_commerce.dto.ProductRequestDTO;
 import com.example.E_commerce.entity.Product;
 import com.example.E_commerce.entity.User;
@@ -35,6 +36,21 @@ public class ProductController {
         User seller= userService.findBYId(sellerId).orElseThrow(()->
                 new ResourceNotFoundException("Cannot find the user with provided Id"));
         product.setSeller(seller);
+        productService.save(product);
+        return ResponseEntity.ok(ProductMapper.createProductDTO(product));
+    }
+    @PutMapping("/updateproduct/{productId}")
+    public ResponseEntity<ProductDTO> updateProduct(@Valid @RequestBody ProductRequestDTO productRequestDTO, @PathVariable int productId){
+        Product product= productService.findById(productId).orElseThrow(()->
+                new ResourceNotFoundException("Cannot Find the product with Specified Id"));
+        product.setName(productRequestDTO.getName());
+        product.setPrice(productRequestDTO.getPrice());
+        product.setDescription(productRequestDTO.getDescription());
+        product.setStockQuantity(productRequestDTO.getQuantity());
+        try{
+            PRODUCT_CATEGORY category = PRODUCT_CATEGORY.valueOf(productRequestDTO.getCategory());
+            product.setCategory(category);
+        }catch (Exception ex){}
         productService.save(product);
         return ResponseEntity.ok(ProductMapper.createProductDTO(product));
     }
