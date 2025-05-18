@@ -9,7 +9,7 @@ import org.springframework.stereotype.Service;
 public class CartItemService {
     @Autowired
     private CartItemRepo cartItemRepo;
-    public CartItem save(CartItem cartItem){
-        return cartItemRepo.save(cartItem);
-    }
+    public CartItem save(CartItem cartItem){return cartItemRepo.save(cartItem);}
+    public void delete(int itemId){ cartItemRepo.deleteById(itemId); }
+    public  boolean existById(int itemId){ return cartItemRepo.existsById(itemId); }
 }
