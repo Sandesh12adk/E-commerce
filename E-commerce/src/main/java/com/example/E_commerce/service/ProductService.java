@@ -12,13 +12,7 @@ public class ProductService {
     @Autowired
     private ProductrRepo productrRepo;
     public Product save(Product product){ return productrRepo.save(product); }
-
-    public void increaseStockQuantity(Product product, int quantity) {
-        int stockQuantity= product.getStockQuantity();
-        stockQuantity+= quantity;
-        product.setStockQuantity(stockQuantity);
-        productrRepo.save(product);
-    }
-    public Optional<Product> findById(int id){ return productrRepo.findById(id) ;}
+    public Optional<Product> findById(int id){ return productrRepo.findById(id); }
+    public void delete(int id){ productrRepo.deleteById(id); }
 
 }
