@@ -1,18 +1,18 @@
 package com.example.E_commerce.controller;
 
 import com.example.E_commerce.Constant.USER_ROLE;
+import com.example.E_commerce.dto.UserDTO;
 import com.example.E_commerce.dto.UserRequestDTO;
 import com.example.E_commerce.entity.Address;
 import com.example.E_commerce.entity.User;
+import com.example.E_commerce.exception.ResourceNotFoundException;
 import com.example.E_commerce.mapper.UserMapper;
 import com.example.E_commerce.repo.UserRepo;
 import com.example.E_commerce.service.UserService;
+import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping("/api/user")
@@ -45,5 +45,15 @@ public class AuthController {
         user.setAddress(address); //This is necessary for java object but not for database
         userRepo.save(user);
         return ResponseEntity.ok( UserMapper.createUserDTO(user));
+    }
+    @PutMapping("updateprofile/{userId}")
+    public ResponseEntity<UserDTO> updateProfile(@Valid  @RequestBody UserRequestDTO userRequestDTO,@PathVariable int userId){
+        User user= userService.findBYId(userId).orElseThrow(()->
+                new ResourceNotFoundException("Cannot Find the user with provided Id"));
+        user.setName(userRequestDTO.getName());
+        user.setEmail(userRequestDTO.getEmail());
+        user.setPassword(userRequestDTO.getPassword());
+        userService.save(user);
+        return ResponseEntity.ok(UserMapper.createUserDTO(user));
     }
 }
