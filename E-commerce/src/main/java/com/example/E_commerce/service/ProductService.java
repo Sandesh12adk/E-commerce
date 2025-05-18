@@ -5,6 +5,8 @@ import com.example.E_commerce.repo.ProductrRepo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.Iterator;
+import java.util.List;
 import java.util.Optional;
 
 @Service
@@ -14,5 +16,6 @@ public class ProductService {
     public Product save(Product product){ return productrRepo.save(product); }
     public Optional<Product> findById(int id){ return productrRepo.findById(id); }
     public void delete(int id){ productrRepo.deleteById(id); }
+    public Iterable<Product> findAll(){ return productrRepo.findAll(); }
 
 }

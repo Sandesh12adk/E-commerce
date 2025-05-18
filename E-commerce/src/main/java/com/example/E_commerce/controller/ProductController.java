@@ -12,8 +12,12 @@ import com.example.E_commerce.service.ProductService;
 import com.example.E_commerce.service.UserService;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.ArrayList;
+import java.util.List;
 
 @RestController
 @RequestMapping("/api/product")
@@ -59,10 +63,21 @@ public class ProductController {
         productService.delete(productId);
         return ResponseEntity.ok("SuccessFully Deleted");
     }
-    @GetMapping("findbyid/{productId}")
+    @GetMapping("/findbyid/{productId}")
     public ResponseEntity<ProductDTO> findById(@PathVariable int productId){
         Product product= productService.findById(productId).orElseThrow(()->
                 new ResourceNotFoundException("Cannot find the product with provided id"));
         return ResponseEntity.ok(ProductMapper.createProductDTO(product));
+    }
+    @GetMapping("/findall")
+    public ResponseEntity<List<ProductDTO>> findALl(){
+        List<Product> productList= new ArrayList<>();
+        productService.findAll().forEach((product)->
+                productList.add(product)
+                );
+       List<ProductDTO> productDTOList= productList.stream().map((product)->{
+           return  ProductMapper.createProductDTO(product);
+                }).toList();
+       return  ResponseEntity.ok(productDTOList);
     }
 }
