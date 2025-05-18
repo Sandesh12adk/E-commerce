@@ -28,7 +28,7 @@ public class ProductController {
         product.setName(productRequestDTO.getName());
         product.setPrice(productRequestDTO.getPrice());
         product.setDescription(productRequestDTO.getDescription());
-        product.setStockQuantity(productRequestDTO.getQuantity());
+        product.setStockQuantity(productRequestDTO.getStockQuantity());
         try{
            PRODUCT_CATEGORY category = PRODUCT_CATEGORY.valueOf(productRequestDTO.getCategory());
            product.setCategory(category);
@@ -46,7 +46,7 @@ public class ProductController {
         product.setName(productRequestDTO.getName());
         product.setPrice(productRequestDTO.getPrice());
         product.setDescription(productRequestDTO.getDescription());
-        product.setStockQuantity(productRequestDTO.getQuantity());
+        product.setStockQuantity(productRequestDTO.getStockQuantity());
         try{
             PRODUCT_CATEGORY category = PRODUCT_CATEGORY.valueOf(productRequestDTO.getCategory());
             product.setCategory(category);
@@ -58,5 +58,11 @@ public class ProductController {
     public ResponseEntity<String> deleteProduct(@PathVariable int productId){
         productService.delete(productId);
         return ResponseEntity.ok("SuccessFully Deleted");
+    }
+    @GetMapping("findbyid/{productId}")
+    public ResponseEntity<ProductDTO> findById(@PathVariable int productId){
+        Product product= productService.findById(productId).orElseThrow(()->
+                new ResourceNotFoundException("Cannot find the product with provided id"));
+        return ResponseEntity.ok(ProductMapper.createProductDTO(product));
     }
 }

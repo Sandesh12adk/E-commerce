@@ -2,6 +2,7 @@ package com.example.E_commerce.dto;
 
 import com.example.E_commerce.Constant.PRODUCT_CATEGORY;
 import com.example.E_commerce.entity.User;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.Column;
 import jakarta.persistence.EnumType;
 import jakarta.persistence.Enumerated;
@@ -28,6 +29,7 @@ public class ProductRequestDTO {
     @NotBlank(message = "Category is required")
     private String category;
 
+
     @Min(value = 1, message = "Quantity should be atleast one")
-    private int quantity;
+    private int stockQuantity;
 }
