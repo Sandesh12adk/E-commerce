@@ -61,11 +61,17 @@ public class OrderController {
         );
         return ResponseEntity.ok(orderDTOList);
     }
-    @GetMapping("findbyorderid/{orderId}")
+    @GetMapping("/findbyorderid/{orderId}")
     public ResponseEntity<OrderDTO> findById(@PathVariable int orderId){
         Order order= orderService.finById(orderId).orElseThrow(()->
                 new ResourceNotFoundException("Cannot find the Order with Id:"+ orderId ));
         return ResponseEntity.ok(OrderMapper.createOrderDTO(order));
     }
-
+     @PutMapping("/update-order-status")
+    public ResponseEntity<String> update(@RequestParam String status,@RequestParam int orderId){
+         Order order= orderService.finById(orderId).orElseThrow(()->
+                 new ResourceNotFoundException("Cannot find the Order with Id:"+ orderId ));
+         orderService.updateStatus(status,order);
+         return ResponseEntity.ok("Updated Successfully");
+     }
 }
