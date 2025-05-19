@@ -61,4 +61,11 @@ public class OrderController {
         );
         return ResponseEntity.ok(orderDTOList);
     }
+    @GetMapping("findbyorderid/{orderId}")
+    public ResponseEntity<OrderDTO> findById(@PathVariable int orderId){
+        Order order= orderService.finById(orderId).orElseThrow(()->
+                new ResourceNotFoundException("Cannot find the Order with Id:"+ orderId ));
+        return ResponseEntity.ok(OrderMapper.createOrderDTO(order));
+    }
+
 }
