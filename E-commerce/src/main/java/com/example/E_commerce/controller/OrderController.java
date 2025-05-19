@@ -1,5 +1,6 @@
 package com.example.E_commerce.controller;
 
+import com.example.E_commerce.dto.OrderDTO;
 import com.example.E_commerce.dto.OrderRequestDTO;
 import com.example.E_commerce.entity.Order;
 import com.example.E_commerce.entity.OrderItem;
@@ -50,5 +51,14 @@ public class OrderController {
         order.setTotalAmount(totalAmount);
         orderService.save(order);
         return ResponseEntity.ok(OrderMapper.createOrderDTO(order));
+    }
+    //Later Make this to list Current Users Orders
+    @GetMapping("/find/{currentuserid}")
+    public ResponseEntity<List<OrderDTO>> listOrders(@PathVariable int currentuserid){
+        List<OrderDTO> orderDTOList= new ArrayList<>();
+        orderService.findByUserId(currentuserid).forEach((order)->
+                orderDTOList.add(OrderMapper.createOrderDTO(order))
+        );
+        return ResponseEntity.ok(orderDTOList);
     }
 }
