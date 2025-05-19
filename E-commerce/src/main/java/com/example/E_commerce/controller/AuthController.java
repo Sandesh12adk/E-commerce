@@ -1,6 +1,7 @@
 package com.example.E_commerce.controller;
 
 import com.example.E_commerce.Constant.USER_ROLE;
+import com.example.E_commerce.dto.LoginRequestDTO;
 import com.example.E_commerce.dto.UserDTO;
 import com.example.E_commerce.dto.UserRequestDTO;
 import com.example.E_commerce.entity.Address;
@@ -9,9 +10,11 @@ import com.example.E_commerce.exception.ResourceNotFoundException;
 import com.example.E_commerce.mapper.UserMapper;
 import com.example.E_commerce.repo.UserRepo;
 import com.example.E_commerce.service.UserService;
+import com.example.E_commerce.service.security.service.JWTservice;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.AccessDeniedException;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.web.bind.annotation.*;
@@ -21,9 +24,11 @@ import org.springframework.web.bind.annotation.*;
 @RequestMapping("/api/user")
 public class AuthController {
     @Autowired
-    UserService userService;
+    private UserService userService;
     @Autowired
-    UserRepo userRepo;
+    private UserRepo userRepo;
+    @Autowired
+    private JWTservice jwTservice;
     BCryptPasswordEncoder bCryptPasswordEncoder= new BCryptPasswordEncoder(10);
     //Register New User
     @PostMapping("/register")
@@ -59,5 +64,16 @@ public class AuthController {
         user.setPassword(userRequestDTO.getPassword());
         userService.save(user);
         return ResponseEntity.ok(UserMapper.createUserDTO(user));
+    }
+    @PostMapping("/login")
+    public ResponseEntity<String> returnToken(@RequestBody LoginRequestDTO loginRequestDTO){
+        String jwtToken="";
+        if(jwTservice.isAuthenticated(loginRequestDTO)){
+            jwtToken= jwTservice.generateToken(loginRequestDTO.getUserName());
+        }
+        else{
+            throw new AccessDeniedException("Sorry you are not the valid user");
+        }
+        return ResponseEntity.ok(jwtToken);
     }
 }
