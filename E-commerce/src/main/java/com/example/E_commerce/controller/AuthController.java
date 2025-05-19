@@ -12,22 +12,26 @@ import com.example.E_commerce.service.UserService;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
+@PreAuthorize("permitAll()")
 @RequestMapping("/api/user")
 public class AuthController {
     @Autowired
     UserService userService;
     @Autowired
     UserRepo userRepo;
+    BCryptPasswordEncoder bCryptPasswordEncoder= new BCryptPasswordEncoder(10);
     //Register New User
     @PostMapping("/register")
     public ResponseEntity<?> registerNewUser(@RequestBody UserRequestDTO userRequestDTO){
         User user= new User();
         user.setName(userRequestDTO.getName());
         user.setEmail(userRequestDTO.getEmail());
-        user.setPassword(userRequestDTO.getPassword());
+        user.setPassword(bCryptPasswordEncoder.encode(userRequestDTO.getPassword()));
         try{
             USER_ROLE role= USER_ROLE.valueOf(userRequestDTO.getRole().toUpperCase());
             user.setRole(role);

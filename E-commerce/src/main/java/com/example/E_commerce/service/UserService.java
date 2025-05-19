@@ -15,4 +15,5 @@ public class UserService {
     UserRepo userRepo;
     public User save(User user){ return userRepo.save(user); }
     public Optional<User>  findBYId(int id) { return userRepo.findById(id); };
+    public Optional<User> findUserByUserName(String userName){  return userRepo.findUserByUserName(userName);}
 }
