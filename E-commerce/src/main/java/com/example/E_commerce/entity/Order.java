@@ -21,7 +21,7 @@ public class Order extends BaseEntity{
     private LocalDate orderDate;
     @Enumerated(value = EnumType.STRING)
     @Column(nullable = false)
-    private OrderStatus status;
+    private OrderStatus status=OrderStatus.PENDING;
     @Column(nullable = false)
     private BigDecimal totalAmount;
    //Order-User RelationShip
@@ -29,7 +29,6 @@ public class Order extends BaseEntity{
     @JoinColumn(name = "UserId")
     private User user;
   //Order-Orderitem Relatiohship
-    @OneToMany(mappedBy = "order",fetch = FetchType.LAZY,cascade = CascadeType.ALL)
-    private List<OrderItem> orderItemList;
-
+    @OneToOne(mappedBy = "order",fetch = FetchType.LAZY,cascade = CascadeType.ALL)
+    private OrderItem orderItem;
 }

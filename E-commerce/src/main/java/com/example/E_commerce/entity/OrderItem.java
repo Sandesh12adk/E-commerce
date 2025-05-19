@@ -22,7 +22,7 @@ public class OrderItem extends BaseEntity{
     @JoinColumn(name = "Order_Id")
     private Order order;
     //OrderItem-Product RelationShip
-    @ManyToOne
+    @OneToOne
     @JoinColumn(name = "Product_Id")
     private Product product;
 }
