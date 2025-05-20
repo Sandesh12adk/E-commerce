@@ -3,6 +3,7 @@ package com.example.E_commerce.controller;
 
 import com.example.E_commerce.Constant.USER_ROLE;
 import com.example.E_commerce.dto.LoginRequestDTO;
+import com.example.E_commerce.dto.ProfileDetailDTO;
 import com.example.E_commerce.dto.UserDTO;
 import com.example.E_commerce.dto.UserRequestDTO;
 import com.example.E_commerce.entity.Address;
@@ -83,6 +84,13 @@ public class AuthController {
         }
         return ResponseEntity.ok(jwtToken);
     }
-
-
+    @GetMapping("my-profile")
+    public ResponseEntity<ProfileDetailDTO> getProfileInfo(){
+        User user= JWTservice.getAuthenticatiedUser();
+        UserDTO userDTO= UserMapper.createUserDTO(user);
+        ProfileDetailDTO profileDetailDTO= new ProfileDetailDTO();
+        profileDetailDTO.setUserDTO(userDTO);
+        profileDetailDTO.setRole(user.getRole().name());
+        return ResponseEntity.ok(profileDetailDTO);
+    }
 }
