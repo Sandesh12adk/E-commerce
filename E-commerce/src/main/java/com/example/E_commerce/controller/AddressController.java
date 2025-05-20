@@ -8,6 +8,7 @@ import com.example.E_commerce.exception.ResourceNotFoundException;
 import com.example.E_commerce.mapper.AddressMapper;
 import com.example.E_commerce.service.AddressService;
 import com.example.E_commerce.service.UserService;
+import com.example.E_commerce.service.security.service.JWTservice;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -20,12 +21,12 @@ public class AddressController {
     AddressService addressService;
     @Autowired
     UserService userService;
-    @PutMapping("/update/{id}")
-    public ResponseEntity<?> updateAddress(@Valid  @RequestBody AddressRequestDTO addressRequestDTO, @PathVariable int id){
+    @PutMapping("/update")
+    public ResponseEntity<?> updateAddress(@Valid  @RequestBody AddressRequestDTO addressRequestDTO){
 
-        int loggedInUserId=id;
-        Address address= addressService.findById(id).orElseThrow(()->
-                new ResourceNotFoundException("Cannot find the address with Provided Id:"+ id));
+        int loggedInUserId= JWTservice.getAuthenticatiedUser().getId();
+        Address address= addressService.findByUserId(loggedInUserId).orElseThrow(()->
+                new ResourceNotFoundException("Cannot find the address with Provided Id:"+ loggedInUserId));
         address.setCity(addressRequestDTO.getCity());
         address.setState(addressRequestDTO.getState());
         address.setStreet(addressRequestDTO.getStreet());

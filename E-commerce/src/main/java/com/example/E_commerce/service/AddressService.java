@@ -13,4 +13,6 @@ public class AddressService {
     AddressRepo addressRepo;
     public Optional<Address> findById(int id){ return addressRepo.findById(id); }
     public Address save(Address address){ return addressRepo.save(address); }
+
+    public Optional<Address> findByUserId(int loggedInUserId) { return addressRepo.finByUserId(loggedInUserId); }
 }
