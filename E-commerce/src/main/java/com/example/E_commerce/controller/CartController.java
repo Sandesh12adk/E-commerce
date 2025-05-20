@@ -17,6 +17,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.ArrayList;
+import java.util.List;
+
 @RestController
 @RequestMapping("/api/cart")
 public class CartController {
@@ -52,11 +55,14 @@ public class CartController {
         cartItemService.deleteByUserIdAndProductId(buyerId,productId);
         return ResponseEntity.ok("Deleted");
     }
-    @GetMapping("/findbyid/{cartItemId}")
-    public ResponseEntity<CartItemDTO> findById(@PathVariable int cartItemId){
-        CartItem cartItem= cartItemService.findById(cartItemId).orElseThrow(()->
-                 new ResourceNotFoundException("Cannot Find the CartItem with provided Id") );
-        return ResponseEntity.ok(CartItemMapper.createCartItemDTO(cartItem));
+    @GetMapping("/findall")
+    public ResponseEntity<List<CartItemDTO>> findById(){
+      int loggedInUserId= JWTservice.getAuthenticatiedUser().getId();
+      List<CartItemDTO> cartItemDTOList=
+      cartItemService.findByBuyerId(loggedInUserId).stream().map((cartItem)-> {
+          return CartItemMapper.createCartItemDTO(cartItem);
+      }).toList();
+        return ResponseEntity.ok(cartItemDTOList);
     }
     @PutMapping("updatequantity/{cartItemId}/{quantity}")
     public ResponseEntity<String> updateTheQuantityOfCartItem(@PathVariable int cartItemId, @PathVariable int quantity){

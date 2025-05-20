@@ -9,6 +9,8 @@ import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.List;
+
 @Repository
 public interface CartItemRepo extends CrudRepository<CartItem,Integer> {
 
@@ -17,6 +19,7 @@ public interface CartItemRepo extends CrudRepository<CartItem,Integer> {
         @Query(value = "DELETE FROM cart WHERE `buyer(user)_id` = :buyerId AND product_id = :productId", nativeQuery = true)
         void deleteByUserIdAndProductId(@Param("buyerId") int buyerId, @Param("productId") int productId);
         public boolean existsByBuyerIdAndProductId(int buyerId, int productId);
+        public List<CartItem> findByBuyerId(int buyerId);
 
 
 }

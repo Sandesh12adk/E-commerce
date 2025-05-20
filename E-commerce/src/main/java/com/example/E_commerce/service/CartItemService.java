@@ -5,6 +5,7 @@ import com.example.E_commerce.repo.CartItemRepo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
 import java.util.Optional;
 
 @Service
@@ -15,6 +16,7 @@ public class CartItemService {
     public void delete(int itemId){ cartItemRepo.deleteById(itemId); }
     public  boolean existById(int itemId){ return cartItemRepo.existsById(itemId); }
     public Optional<CartItem> findById(int id){ return cartItemRepo.findById(id); }
+    public List<CartItem> findByBuyerId(int buyerId){ return cartItemRepo.findByBuyerId(buyerId); }
 
     public void deleteByUserIdAndProductId(int buyerId,int productId) {
          cartItemRepo.deleteByUserIdAndProductId(buyerId,productId); }
