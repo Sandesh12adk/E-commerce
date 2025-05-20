@@ -11,16 +11,22 @@ This is a full-featured **E-Commerce REST API** developed using **Spring Boot**.
 - 🛍 **Cart Operations**
 - 📬 **Order Placement & Tracking**
 - 🧾 **Address Management**
-- 🛡️ **Role-Based Authorization (USER, ADMIN)**
+- 🛡️ **Role-Based Authorization (USER, SELLER)**
 
 ---
+## 🔒 Security Implementation
+- Role-based authorization with Spring Security
+- JWT token authentication
+- Password encryption with BCrypt
+- CSRF protection
+- Stateless session management
 
+- ---
 ## 📚 Tech Stack
-
-- **Backend:** Spring Boot, Spring Data JPA, Spring Security
-- **Database:** MySQL / PostgreSQL (configurable)
+- **Backend:** Spring Boot, Spring Data JPA, Spring Security,JWT Token Authentication
+- **Database:** MySQL
 - **Build Tool:** Maven
-- **API Tool:** Postman / Swagger (if available)
+- **API Tool:** Postman / Swagger
 
 ---
 
