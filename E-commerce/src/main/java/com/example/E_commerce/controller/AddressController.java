@@ -34,9 +34,10 @@ public class AddressController {
         addressService.save(address);
         return ResponseEntity.ok(AddressMapper.createAddressDTO(address));
     }
-    @GetMapping("/get-address-by-userid/{userId}")
-    public ResponseEntity<AddressDTO> getUserAddress(@PathVariable int userId){
-        User user= userService.findBYId(userId).orElseThrow(()->
+    @GetMapping("/get-my-address")
+    public ResponseEntity<AddressDTO> getUserAddress(){
+        int loggedInUserId= JWTservice.getAuthenticatiedUser().getId();
+        User user= userService.findBYId(loggedInUserId).orElseThrow(()->
                 new ResourceNotFoundException("Cannot find the user with provided Id"));
         Address address= user.getAddress();
         return ResponseEntity.ok(AddressMapper.createAddressDTO(address));
