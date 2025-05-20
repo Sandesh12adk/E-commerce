@@ -2,6 +2,7 @@ package com.example.E_commerce.service.security.service;
 
 
 import com.example.E_commerce.dto.LoginRequestDTO;
+import com.example.E_commerce.entity.User;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
 import io.jsonwebtoken.io.Decoders;
@@ -12,6 +13,7 @@ import org.springframework.context.ApplicationContext;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
 import io.jsonwebtoken.Claims;
@@ -25,11 +27,19 @@ import java.util.function.Function;
 public class JWTservice {
     @Autowired
     ApplicationContext context;
+    //To start the authentication
     public   boolean isAuthenticated(LoginRequestDTO loginRequestDTO){
         var authenticationManager= context.getBean(AuthenticationManager.class);
         Authentication authentication= authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(loginRequestDTO
                 .getUserName(),loginRequestDTO.getPassword()));
         return authentication.isAuthenticated();
+    }
+    //To just get the authentication object for already authentiacated user becuae once the authention is sompleted the return of thee
+    //about method is stord in the SecurityContetHolder
+    public static User getAuthenticatiedUser(){
+        Authentication authentication= SecurityContextHolder.getContext().getAuthentication();
+        UserPrincipal userPrincipal= (UserPrincipal) authentication.getPrincipal();
+        return userPrincipal.getUser();
     }
     @Value("${jwt.secret}")
     private String secretkey;

@@ -20,7 +20,6 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
-@PreAuthorize("permitAll()")
 @RequestMapping("/api/user")
 public class AuthController {
     @Autowired
@@ -30,7 +29,8 @@ public class AuthController {
     @Autowired
     private JWTservice jwTservice;
     BCryptPasswordEncoder bCryptPasswordEncoder= new BCryptPasswordEncoder(10);
-    //Register New User
+
+    @PreAuthorize("permitAll()")
     @PostMapping("/register")
     public ResponseEntity<?> registerNewUser(@RequestBody UserRequestDTO userRequestDTO){
         User user= new User();
@@ -55,16 +55,20 @@ public class AuthController {
         userRepo.save(user);
         return ResponseEntity.ok( UserMapper.createUserDTO(user));
     }
-    @PutMapping("updateprofile/{userId}")
-    public ResponseEntity<UserDTO> updateProfile(@Valid  @RequestBody UserRequestDTO userRequestDTO,@PathVariable int userId){
+
+    @PreAuthorize("permitAll()")
+    @PutMapping("updateprofile")
+    public ResponseEntity<UserDTO> updateProfile(@Valid  @RequestBody UserRequestDTO userRequestDTO){
+        int userId= JWTservice.getAuthenticatiedUser().getId();
         User user= userService.findBYId(userId).orElseThrow(()->
                 new ResourceNotFoundException("Cannot Find the user with provided Id"));
         user.setName(userRequestDTO.getName());
         user.setEmail(userRequestDTO.getEmail());
-        user.setPassword(userRequestDTO.getPassword());
+        user.setPassword(bCryptPasswordEncoder.encode(userRequestDTO.getPassword()));
         userService.save(user);
         return ResponseEntity.ok(UserMapper.createUserDTO(user));
     }
+    @PreAuthorize("permitAll()")
     @PostMapping("/login")
     public ResponseEntity<String> returnToken(@RequestBody LoginRequestDTO loginRequestDTO){
         String jwtToken="";
