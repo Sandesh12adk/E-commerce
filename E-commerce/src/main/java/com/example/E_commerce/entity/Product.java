@@ -2,6 +2,8 @@ package com.example.E_commerce.entity;
 
 
 import com.example.E_commerce.Constant.PRODUCT_CATEGORY;
+import com.fasterxml.jackson.annotation.JsonIdentityInfo;
+import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 import jakarta.persistence.*;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
@@ -18,6 +20,7 @@ import java.util.List;
 @EqualsAndHashCode(callSuper = true)
 @Table(name = "product")
 @EntityListeners(AuditingEntityListener.class)
+@JsonIdentityInfo(generator = ObjectIdGenerators.PropertyGenerator.class, property = "id")
 public class Product extends BaseEntity{
     @Column(nullable = false)
     private String name;

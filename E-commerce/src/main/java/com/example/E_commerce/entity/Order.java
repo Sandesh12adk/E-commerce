@@ -1,6 +1,8 @@
 package com.example.E_commerce.entity;
 
 import com.example.E_commerce.Constant.OrderStatus;
+import com.fasterxml.jackson.annotation.JsonIdentityInfo;
+import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 import jakarta.persistence.*;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
@@ -16,6 +18,7 @@ import java.util.List;
 @Data
 @EqualsAndHashCode(callSuper = true)
 @EntityListeners(AuditingEntityListener.class)
+@JsonIdentityInfo(generator = ObjectIdGenerators.PropertyGenerator.class, property = "id")
 public class Order extends BaseEntity{
     @CreatedDate
     private LocalDate orderDate;
@@ -29,6 +32,6 @@ public class Order extends BaseEntity{
     @JoinColumn(name = "UserId")
     private User user;
   //Order-Orderitem Relatiohship
-    @OneToOne(mappedBy = "order",fetch = FetchType.LAZY,cascade = CascadeType.ALL)
+    @OneToOne(mappedBy = "order",cascade = CascadeType.ALL)
     private OrderItem orderItem;
 }

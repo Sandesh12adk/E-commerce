@@ -1,3 +1,4 @@
+
 package com.example.E_commerce.controller;
 
 import com.example.E_commerce.Constant.USER_ROLE;
@@ -11,6 +12,7 @@ import com.example.E_commerce.mapper.UserMapper;
 import com.example.E_commerce.repo.UserRepo;
 import com.example.E_commerce.service.UserService;
 import com.example.E_commerce.service.security.service.JWTservice;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -21,6 +23,7 @@ import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping("/api/user")
+@Tag(name="Auth APIs")
 public class AuthController {
     @Autowired
     private UserService userService;
@@ -80,4 +83,6 @@ public class AuthController {
         }
         return ResponseEntity.ok(jwtToken);
     }
+
+
 }

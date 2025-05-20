@@ -14,6 +14,7 @@ import com.example.E_commerce.service.OrderService;
 import com.example.E_commerce.service.ProductService;
 import com.example.E_commerce.service.UserService;
 import com.example.E_commerce.service.security.service.JWTservice;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -26,6 +27,7 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/api/order")
+@Tag(name="Order APIs")
 public class OrderController {
     @Autowired
     private UserService userService;

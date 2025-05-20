@@ -29,15 +29,31 @@ public class SecurityConfigure {
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         http.csrf(csrf -> csrf.disable())
                 .authorizeHttpRequests(auth -> auth
-                        .requestMatchers("/api/user/register/**","/api/user/login",
-                      "/api/product/findbyid/{productId","api/product/findall").permitAll()
-                        .requestMatchers("/api/product/updateproduct/{productId}",
-                                "/api/product//delete/{productId}","/api/product/add",
-                       "/api/order/update-order-status" ).hasRole(USER_ROLE.SELLER.name())
-                        .requestMatchers("/api/order/placeorder","/api/cart/**").hasAnyRole(USER_ROLE.CUSTOMER.name())
-                        .requestMatchers("/api/order/findall").hasAnyRole(USER_ROLE.SELLER.name(), USER_ROLE.CUSTOMER.name())
-                        .anyRequest().authenticated() // require auth for all others
+                        .requestMatchers(
+                                "/api/user/register/**",
+                                "/api/user/login",
+                                "/api/product/findbyid/{productId}",
+                                "/api/product/findall"
+                        ).permitAll()
+
+                        .requestMatchers(
+                                "/api/product/updateproduct/{productId}",
+                                "/api/product/delete/{productId}",
+                                "/api/product/add",
+                                "/api/order/update-order-status"
+                        ).hasRole(USER_ROLE.SELLER.name())
+
+                        .requestMatchers(
+                                "/api/order/placeorder",
+                                "/api/cart/**"
+                        ).hasAnyRole(USER_ROLE.CUSTOMER.name())
+
+                        .requestMatchers("/api/order/findall")
+                        .hasAnyRole(USER_ROLE.SELLER.name(), USER_ROLE.CUSTOMER.name())
+
+                        .anyRequest().authenticated()
                 )
+
                 .sessionManagement(session -> session
                         .sessionCreationPolicy(SessionCreationPolicy.STATELESS)
                 )

@@ -9,6 +9,7 @@ import com.example.E_commerce.mapper.AddressMapper;
 import com.example.E_commerce.service.AddressService;
 import com.example.E_commerce.service.UserService;
 import com.example.E_commerce.service.security.service.JWTservice;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -17,6 +18,7 @@ import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping("/api/address")
+@Tag(name="Address APIs")
 public class AddressController {
     @Autowired
     AddressService addressService;

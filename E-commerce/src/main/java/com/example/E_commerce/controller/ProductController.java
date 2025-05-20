@@ -11,6 +11,7 @@ import com.example.E_commerce.mapper.ProductMapper;
 import com.example.E_commerce.service.ProductService;
 import com.example.E_commerce.service.UserService;
 import com.example.E_commerce.service.security.service.JWTservice;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -24,8 +25,9 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/api/product")
+@Tag(name="Product APIs")
 public class ProductController {
-    @Autowired
+   @Autowired
     private UserService userService;
     @Autowired
     private ProductService productService;
@@ -104,3 +106,4 @@ public class ProductController {
        return  ResponseEntity.ok(productDTOList);
     }
 }
+
