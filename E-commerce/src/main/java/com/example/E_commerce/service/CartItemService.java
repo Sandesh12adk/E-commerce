@@ -15,4 +15,10 @@ public class CartItemService {
     public void delete(int itemId){ cartItemRepo.deleteById(itemId); }
     public  boolean existById(int itemId){ return cartItemRepo.existsById(itemId); }
     public Optional<CartItem> findById(int id){ return cartItemRepo.findById(id); }
+
+    public void deleteByUserIdAndProductId(int buyerId,int productId) {
+         cartItemRepo.deleteByUserIdAndProductId(buyerId,productId); }
+
+    public boolean existsByBuyerIdAndProductId(int buyerId, int productId){
+       return cartItemRepo.existsByBuyerIdAndProductId(buyerId,productId);  }
 }

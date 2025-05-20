@@ -43,12 +43,13 @@ public class CartController {
         cartItemService.save(cartItem);
         return ResponseEntity.ok(CartItemMapper.createCartItemDTO(cartItem));
     }
-    @DeleteMapping("/delete/{itemId}")
-    public ResponseEntity<String> deleteCartItem( @PathVariable int itemId){
-        if(!cartItemService.existById(itemId)){
+    @DeleteMapping("/delete")
+    public ResponseEntity<String> deleteCartItem( @RequestParam int productId){
+        int buyerId= JWTservice.getAuthenticatiedUser().getId();
+        if(!cartItemService.existsByBuyerIdAndProductId(buyerId,productId)){
             throw new ResourceNotFoundException("No Item Found in cart with provided Id");
         }
-        cartItemService.delete(itemId);
+        cartItemService.deleteByUserIdAndProductId(buyerId,productId);
         return ResponseEntity.ok("Deleted");
     }
     @GetMapping("/findbyid/{cartItemId}")
