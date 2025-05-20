@@ -64,10 +64,14 @@ public class CartController {
       }).toList();
         return ResponseEntity.ok(cartItemDTOList);
     }
-    @PutMapping("updatequantity/{cartItemId}/{quantity}")
-    public ResponseEntity<String> updateTheQuantityOfCartItem(@PathVariable int cartItemId, @PathVariable int quantity){
-          CartItem cartItem= cartItemService.findById(cartItemId).orElseThrow(()->
+    @PutMapping("updatequantity")
+    public ResponseEntity<String> updateTheQuantityOfCartItem(@RequestParam int cartItemId, @RequestParam int quantity){
+        int buyerId= JWTservice.getAuthenticatiedUser().getId();
+          CartItem cartItem= cartItemService.findByIdAndBuyerId(cartItemId,buyerId).orElseThrow(()->
                 new ResourceNotFoundException("Cannot Find the CartItem with provided Id"));
+          if(cartItem.getProduct().getStockQuantity()<quantity){
+              throw new OutOfStock("Sorry, We Don't have Suffieciend Producrs");
+          }
           cartItem.setQuantity(quantity);
           cartItemService.save(cartItem);
           return ResponseEntity.ok("Updated Successfully");

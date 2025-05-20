@@ -18,9 +18,13 @@ public class CartItemService {
     public Optional<CartItem> findById(int id){ return cartItemRepo.findById(id); }
     public List<CartItem> findByBuyerId(int buyerId){ return cartItemRepo.findByBuyerId(buyerId); }
 
+
     public void deleteByUserIdAndProductId(int buyerId,int productId) {
          cartItemRepo.deleteByUserIdAndProductId(buyerId,productId); }
-
     public boolean existsByBuyerIdAndProductId(int buyerId, int productId){
        return cartItemRepo.existsByBuyerIdAndProductId(buyerId,productId);  }
+
+    public Optional<CartItem> findByIdAndBuyerId(int cartId, int buyerId){
+        return cartItemRepo.findByIdAndBuyerId(cartId,buyerId);
+    }
 }
