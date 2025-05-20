@@ -1,5 +1,6 @@
 package com.example.E_commerce.configure;
 
+import com.example.E_commerce.Constant.USER_ROLE;
 import com.example.E_commerce.service.security.service.Filter;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
@@ -11,6 +12,7 @@ import org.springframework.security.config.Customizer;
 import org.springframework.security.config.annotation.authentication.configuration.AuthenticationConfiguration;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.http.SessionCreationPolicy;
+import org.springframework.security.core.userdetails.User;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.NoOpPasswordEncoder;
@@ -27,7 +29,13 @@ public class SecurityConfigure {
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         http.csrf(csrf -> csrf.disable())
                 .authorizeHttpRequests(auth -> auth
-                        .requestMatchers("/api/user/register/**","/api/user/login").permitAll() // allow registration
+                        .requestMatchers("/api/user/register/**","/api/user/login",
+                      "/api/product/findbyid/{productId","api/product/findall").permitAll()
+                        .requestMatchers("/api/product/updateproduct/{productId}",
+                                "/api/product//delete/{productId}","/api/product/add",
+                       "/api/order/update-order-status" ).hasRole(USER_ROLE.SELLER.name())
+                        .requestMatchers("/api/order/placeorder","/api/cart/**").hasAnyRole(USER_ROLE.CUSTOMER.name())
+                        .requestMatchers("/api/order/findall").hasAnyRole(USER_ROLE.SELLER.name(), USER_ROLE.CUSTOMER.name())
                         .anyRequest().authenticated() // require auth for all others
                 )
                 .sessionManagement(session -> session

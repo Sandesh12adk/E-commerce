@@ -1,5 +1,6 @@
 package com.example.E_commerce.controller;
 
+import com.example.E_commerce.Constant.USER_ROLE;
 import com.example.E_commerce.dto.OrderDTO;
 import com.example.E_commerce.dto.OrderRequestDTO;
 import com.example.E_commerce.entity.Order;
@@ -12,9 +13,11 @@ import com.example.E_commerce.mapper.OrderMapper;
 import com.example.E_commerce.service.OrderService;
 import com.example.E_commerce.service.ProductService;
 import com.example.E_commerce.service.UserService;
+import com.example.E_commerce.service.security.service.JWTservice;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.math.BigDecimal;
@@ -30,9 +33,10 @@ public class OrderController {
     private ProductService productService;
     @Autowired
     private OrderService orderService;
-    @PostMapping("/placeorder/{userId}")
-    public ResponseEntity<?> placeOrder(@Valid  @RequestBody OrderRequestDTO orderRequestDTO, @PathVariable int userId){
-
+    @PreAuthorize("hasRole('CUSTOMER')")
+    @PostMapping("/placeorder")
+    public ResponseEntity<?> placeOrder(@Valid  @RequestBody OrderRequestDTO orderRequestDTO){
+       int userId= JWTservice.getAuthenticatiedUser().getId();
         User buyer= userService.findBYId(userId).orElseThrow(()->
                 new ResourceNotFoundException("Cannot Find the Buyer with provided Id"));
        Product product= productService.findById(orderRequestDTO.getProductId()).orElseThrow(()->
@@ -53,24 +57,26 @@ public class OrderController {
         return ResponseEntity.ok(OrderMapper.createOrderDTO(order));
     }
     //Later Make this to list Current Users Orders
-    @GetMapping("/find/{currentuserid}")
-    public ResponseEntity<List<OrderDTO>> listOrders(@PathVariable int currentuserid){
+    @PreAuthorize("hasRole('CUSTOMER','SELLER')")
+    @GetMapping("/findall")
+    public ResponseEntity<List<OrderDTO>> listOrders(){
+        int currentuserid= JWTservice.getAuthenticatiedUser().getId();
         List<OrderDTO> orderDTOList= new ArrayList<>();
         orderService.findByUserId(currentuserid).forEach((order)->
                 orderDTOList.add(OrderMapper.createOrderDTO(order))
         );
         return ResponseEntity.ok(orderDTOList);
     }
-    @GetMapping("/findbyorderid/{orderId}")
-    public ResponseEntity<OrderDTO> findById(@PathVariable int orderId){
-        Order order= orderService.finById(orderId).orElseThrow(()->
-                new ResourceNotFoundException("Cannot find the Order with Id:"+ orderId ));
-        return ResponseEntity.ok(OrderMapper.createOrderDTO(order));
-    }
+
+    @PreAuthorize("hasRole('SELLER')")
      @PutMapping("/update-order-status")
     public ResponseEntity<String> update(@RequestParam String status,@RequestParam int orderId){
+        int sellerId= JWTservice.getAuthenticatiedUser().getId();
          Order order= orderService.finById(orderId).orElseThrow(()->
                  new ResourceNotFoundException("Cannot find the Order with Id:"+ orderId ));
+         if(order.getOrderItem().getProduct().getSeller().getId()!=sellerId){
+             throw new ResourceNotFoundException("Cannot find the Order with Id:"+ orderId );
+         }
          orderService.updateStatus(status,order);
          return ResponseEntity.ok("Updated Successfully");
      }

@@ -15,6 +15,7 @@ import com.example.E_commerce.service.security.service.JWTservice;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.ArrayList;
@@ -29,6 +30,7 @@ public class CartController {
     private ProductService productService;
     @Autowired
     private CartItemService cartItemService;
+    @PreAuthorize("hasRole('CUSTOMER')")
     @PostMapping("/add")
     public ResponseEntity<?> addToCart( @Valid @RequestBody CartItemRequestDTO cartItemRequestDTO){
         CartItem cartItem= new CartItem();
@@ -46,6 +48,7 @@ public class CartController {
         cartItemService.save(cartItem);
         return ResponseEntity.ok(CartItemMapper.createCartItemDTO(cartItem));
     }
+    @PreAuthorize("hasRole('CUSTOMER')")
     @DeleteMapping("/delete")
     public ResponseEntity<String> deleteCartItem( @RequestParam int productId){
         int buyerId= JWTservice.getAuthenticatiedUser().getId();
@@ -55,6 +58,7 @@ public class CartController {
         cartItemService.deleteByUserIdAndProductId(buyerId,productId);
         return ResponseEntity.ok("Deleted");
     }
+    @PreAuthorize("hasRole('CUSTOMER')")
     @GetMapping("/findall")
     public ResponseEntity<List<CartItemDTO>> findById(){
       int loggedInUserId= JWTservice.getAuthenticatiedUser().getId();
@@ -64,6 +68,7 @@ public class CartController {
       }).toList();
         return ResponseEntity.ok(cartItemDTOList);
     }
+    @PreAuthorize("hasRole('CUSTOMER')")
     @PutMapping("updatequantity")
     public ResponseEntity<String> updateTheQuantityOfCartItem(@RequestParam int cartItemId, @RequestParam int quantity){
         int buyerId= JWTservice.getAuthenticatiedUser().getId();

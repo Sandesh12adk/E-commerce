@@ -12,6 +12,7 @@ import com.example.E_commerce.service.security.service.JWTservice;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
@@ -21,6 +22,7 @@ public class AddressController {
     AddressService addressService;
     @Autowired
     UserService userService;
+    @PreAuthorize("authenticated()")
     @PutMapping("/update")
     public ResponseEntity<?> updateAddress(@Valid  @RequestBody AddressRequestDTO addressRequestDTO){
 
@@ -34,6 +36,7 @@ public class AddressController {
         addressService.save(address);
         return ResponseEntity.ok(AddressMapper.createAddressDTO(address));
     }
+    @PreAuthorize("authenticated()")
     @GetMapping("/get-my-address")
     public ResponseEntity<AddressDTO> getUserAddress(){
         int loggedInUserId= JWTservice.getAuthenticatiedUser().getId();
