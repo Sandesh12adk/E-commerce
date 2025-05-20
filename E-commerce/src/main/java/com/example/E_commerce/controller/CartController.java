@@ -11,6 +11,7 @@ import com.example.E_commerce.mapper.CartItemMapper;
 import com.example.E_commerce.service.CartItemService;
 import com.example.E_commerce.service.ProductService;
 import com.example.E_commerce.service.UserService;
+import com.example.E_commerce.service.security.service.JWTservice;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -28,7 +29,8 @@ public class CartController {
     @PostMapping("/add")
     public ResponseEntity<?> addToCart( @Valid @RequestBody CartItemRequestDTO cartItemRequestDTO){
         CartItem cartItem= new CartItem();
-        User buyer= userService.findBYId(cartItemRequestDTO.getBuyerId()).orElseThrow(()->
+        int buyerId= JWTservice.getAuthenticatiedUser().getId();
+        User buyer= userService.findBYId(buyerId).orElseThrow(()->
                  new ResourceNotFoundException("Cannot Find the Buyer with provided Id"));
         Product product= productService.findById(cartItemRequestDTO.getProductId()).orElseThrow(()->
                 new ResourceNotFoundException("Cannot Find the Product with provided Id"));

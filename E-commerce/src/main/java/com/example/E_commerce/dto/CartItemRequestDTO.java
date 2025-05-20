@@ -10,9 +10,6 @@ public class CartItemRequestDTO {
     @Min(value = 1, message = "Item quantity should be at least one")
     private int quantity;
 
-    @Min(value = 1, message = "Buyer ID must be a positive number")
-    private int buyerId;
-
     @Min(value = 1, message = "Product ID must be a positive number")
     private int productId;
 }

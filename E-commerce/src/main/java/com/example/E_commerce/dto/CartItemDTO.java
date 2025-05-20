@@ -6,4 +6,5 @@ import lombok.EqualsAndHashCode;
 @Data
 @EqualsAndHashCode(callSuper = true)
 public class CartItemDTO extends CartItemRequestDTO {
+    private int buyerId;
 }
