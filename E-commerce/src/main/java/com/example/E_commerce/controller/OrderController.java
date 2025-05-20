@@ -71,7 +71,7 @@ public class OrderController {
     }
 
     @PreAuthorize("hasRole('SELLER')")
-     @PutMapping("/update-order-status")
+     @PutMapping("/Update-order-status")
     public ResponseEntity<String> update(@RequestParam String status,@RequestParam int orderId){
         int sellerId= JWTservice.getAuthenticatiedUser().getId();
          Order order= orderService.finById(orderId).orElseThrow(()->
