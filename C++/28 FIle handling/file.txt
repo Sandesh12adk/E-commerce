@@ -1,3 +1,0 @@
-Learning file halding in c++.
-This text is added by opening the file in append mode.
-This text is added by opening the file in append mode.
